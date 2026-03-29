@@ -6290,6 +6290,309 @@ function NeverLose:CreateNotification()
 	return Notifier;
 end;
 
+function NeverLose:CreateColorPicker(HandleFrame: Frame)
+	local ZIndex = HandleFrame.ZIndex;
+
+	local ColorPickerLib = {};
+
+	local ColorPickerHandler = Instance.new("Frame")
+	local UICorner = Instance.new("UICorner")
+	local UIStroke = Instance.new("UIStroke")
+	local SaViMap = Instance.new("ImageLabel")
+	local UICorner_2 = Instance.new("UICorner")
+	local ColorZoneSelection = Instance.new("Frame")
+	local UICorner_3 = Instance.new("UICorner")
+	local UIStroke_2 = Instance.new("UIStroke")
+	local ColorMap = Instance.new("Frame")
+	local UIGradient = Instance.new("UIGradient")
+	local UICorner_4 = Instance.new("UICorner")
+	local ColorMapSelection = Instance.new("Frame")
+	local UIStroke_3 = Instance.new("UIStroke")
+	local UICorner_5 = Instance.new("UICorner")
+	local RGBLabel = Instance.new("TextLabel")
+	local UICorner_6 = Instance.new("UICorner")
+	local Shadow = NeverLose:CreateShadow(ColorPickerHandler);
+
+	ColorPickerHandler.Name = NeverLose.RandomString();
+	ColorPickerHandler.Parent = NeverLose.ScreenGui
+	ColorPickerHandler.AnchorPoint = Vector2.new(0, 0)
+	ColorPickerHandler.BackgroundColor3 = Color3.fromRGB(20, 22, 27)
+	ColorPickerHandler.BackgroundTransparency = 0.035
+	ColorPickerHandler.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ColorPickerHandler.BorderSizePixel = 0
+	ColorPickerHandler.ClipsDescendants = true
+	ColorPickerHandler.Position = UDim2.new(255, 0, 255, 20)
+	ColorPickerHandler.Size = UDim2.new(0, 200, 0, 240)
+	ColorPickerHandler.ZIndex = ZIndex + 125
+
+	NeverLose:AddSignal(ColorPickerHandler:GetPropertyChangedSignal('BackgroundTransparency'):Connect(LPH_NO_VIRTUALIZE(function()
+		if ColorPickerHandler.BackgroundTransparency > 0.9 then
+			ColorPickerHandler.Visible = false;
+			ColorPickerHandler.Parent = nil
+		else
+			ColorPickerHandler.Visible = true;
+
+			if NeverLose.Global3DRenderMode then
+				ColorPickerHandler.Parent = NeverLose.GlobalSurfaceGui;
+			else
+				ColorPickerHandler.Parent = NeverLose.ScreenGui;
+			end;
+		end;
+	end)));
+
+	UICorner.CornerRadius = UDim.new(0, 10)
+	UICorner.Parent = ColorPickerHandler
+
+	UIStroke.Transparency = 0.650
+	UIStroke.Color = Color3.fromRGB(45, 48, 58)
+	UIStroke.Parent = ColorPickerHandler
+
+	SaViMap.Name = NeverLose.RandomString();
+	SaViMap.Parent = ColorPickerHandler
+	SaViMap.AnchorPoint = Vector2.new(0.5, 0)
+	SaViMap.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+	SaViMap.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	SaViMap.BorderSizePixel = 0
+	SaViMap.Position = UDim2.new(0.5, 0, 0, 5)
+	SaViMap.Size = UDim2.new(0, 185, 0, 185)
+	SaViMap.ZIndex = ZIndex + 126
+	SaViMap.Image = NeverLose.ImageColorMapping -- UNSAFE IMAGE
+
+	UICorner_2.CornerRadius = UDim.new(0, 5)
+	UICorner_2.Parent = SaViMap
+
+	ColorZoneSelection.Name = NeverLose.RandomString();
+	ColorZoneSelection.Parent = SaViMap
+	ColorZoneSelection.AnchorPoint = Vector2.new(0.5, 0.5)
+	ColorZoneSelection.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ColorZoneSelection.BackgroundTransparency = 1.000
+	ColorZoneSelection.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ColorZoneSelection.BorderSizePixel = 0
+	ColorZoneSelection.Position = UDim2.new(0.5, 0, 0.5, 0)
+	ColorZoneSelection.Size = UDim2.new(0, 10, 0, 10)
+	ColorZoneSelection.ZIndex = ZIndex + 127
+
+	UICorner_3.CornerRadius = UDim.new(1, 0)
+	UICorner_3.Parent = ColorZoneSelection
+
+	UIStroke_2.Color = Color3.fromRGB(255, 255, 255)
+	UIStroke_2.Parent = ColorZoneSelection
+
+	ColorMap.Name = NeverLose.RandomString();
+	ColorMap.Parent = ColorPickerHandler
+	ColorMap.AnchorPoint = Vector2.new(0.5, 0)
+	ColorMap.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ColorMap.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ColorMap.BorderSizePixel = 0
+	ColorMap.Position = UDim2.new(0.5, 0, 0, 200)
+	ColorMap.Size = UDim2.new(1, -15, 0, 10)
+	ColorMap.ZIndex = ZIndex + 126
+
+	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)), ColorSequenceKeypoint.new(0.10, Color3.fromRGB(255, 153, 0)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(203, 255, 0)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(50, 255, 0)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 255, 102)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(0, 101, 255)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(50, 0, 255)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(204, 0, 255)), ColorSequenceKeypoint.new(0.90, Color3.fromRGB(255, 0, 153)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))}
+	UIGradient.Parent = ColorMap
+
+	UICorner_4.CornerRadius = UDim.new(0, 3)
+	UICorner_4.Parent = ColorMap
+
+	ColorMapSelection.Name = NeverLose.RandomString();
+	ColorMapSelection.Parent = ColorMap
+	ColorMapSelection.AnchorPoint = Vector2.new(0.5, 0.5)
+	ColorMapSelection.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ColorMapSelection.BackgroundTransparency = 1.000
+	ColorMapSelection.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ColorMapSelection.BorderSizePixel = 0
+	ColorMapSelection.Position = UDim2.new(0, 0, 0.5, 0)
+	ColorMapSelection.Size = UDim2.new(0, 5, 1, 0)
+	ColorMapSelection.ZIndex = ZIndex + 126
+
+	UIStroke_3.Thickness = 2.000
+	UIStroke_3.Color = Color3.fromRGB(255, 255, 255)
+	UIStroke_3.Parent = ColorMapSelection
+
+	UICorner_5.CornerRadius = UDim.new(0, 3)
+	UICorner_5.Parent = ColorMapSelection
+
+	RGBLabel.Name = NeverLose.RandomString();
+	RGBLabel.Parent = ColorPickerHandler
+	RGBLabel.BackgroundColor3 = Color3.fromRGB(26, 28, 36)
+	RGBLabel.BackgroundTransparency = 0.750
+	RGBLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	RGBLabel.BorderSizePixel = 0
+	RGBLabel.Position = UDim2.new(0, 10, 0, 217)
+	RGBLabel.Size = UDim2.new(1, -20, 0, 15)
+	RGBLabel.ZIndex = ZIndex + 127
+	RGBLabel.Font = Enum.Font.GothamBold
+	RGBLabel.Text = "#FFFFFF"
+	RGBLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	RGBLabel.TextSize = 12.000
+	RGBLabel.TextTransparency = 0.400
+	RGBLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	UICorner_6.CornerRadius = UDim.new(0, 4)
+	UICorner_6.Parent = RGBLabel
+
+	ColorPickerLib.SetRender = LPH_NO_VIRTUALIZE(function(value)
+		if value then
+			ColorPickerHandler.Position = UDim2.new(0,HandleFrame.AbsolutePosition.X + 20 , 0 ,HandleFrame.AbsolutePosition.Y + 75);
+
+			NeverLose.PlayAnimate(ColorPickerHandler,SlowyTween , {
+				BackgroundTransparency = 0.035
+			})
+
+			NeverLose.PlayAnimate(UIStroke,SlowyTween , {
+				Transparency = 0.650
+			})
+
+			NeverLose.PlayAnimate(SaViMap,SlowyTween , {
+				BackgroundTransparency = 0,
+				ImageTransparency = 0
+			})
+
+			NeverLose.PlayAnimate(UIStroke_2,SlowyTween , {
+				Transparency = 0
+			})
+
+			NeverLose.PlayAnimate(ColorMap,SlowyTween , {
+				BackgroundTransparency = 0
+			})
+
+			NeverLose.PlayAnimate(UIStroke_3,SlowyTween , {
+				Transparency = 0
+			})
+
+			NeverLose.PlayAnimate(RGBLabel,SlowyTween , {
+				BackgroundTransparency = 0.750,
+				TextTransparency = 0.400
+			})
+
+			Shadow:Render(true)
+		else
+			NeverLose.PlayAnimate(ColorPickerHandler,SlowyTween , {
+				BackgroundTransparency = 1
+			})
+
+			NeverLose.PlayAnimate(UIStroke,SlowyTween , {
+				Transparency = 1
+			})
+
+			NeverLose.PlayAnimate(SaViMap,SlowyTween , {
+				BackgroundTransparency = 1,
+				ImageTransparency = 1
+			})
+
+			NeverLose.PlayAnimate(UIStroke_2,SlowyTween , {
+				Transparency = 1
+			})
+
+			NeverLose.PlayAnimate(ColorMap,SlowyTween , {
+				BackgroundTransparency = 1
+			})
+
+			NeverLose.PlayAnimate(UIStroke_3,SlowyTween , {
+				Transparency = 1
+			})
+
+			NeverLose.PlayAnimate(RGBLabel,SlowyTween , {
+				BackgroundTransparency = 1,
+				TextTransparency = 1
+			})
+
+			Shadow:Render(false)
+		end;
+	end);
+
+	ColorPickerLib.SetRender(false);
+	ColorPickerLib.Root = ColorPickerHandler;
+	ColorPickerLib.H = 1;
+	ColorPickerLib.S = 1;
+	ColorPickerLib.V = 1;
+	ColorPickerLib.Callback = EmptyFunction;
+
+	function ColorPickerLib:Update()
+		local RealColor = Color3.fromHSV(ColorPickerLib.H , ColorPickerLib.S , ColorPickerLib.V);
+
+		NeverLose.PlayAnimate(ColorZoneSelection,ManualTween,{
+			Position = UDim2.fromScale(ColorPickerLib.S , 1 - ColorPickerLib.V)
+		});
+
+		NeverLose.PlayAnimate(SaViMap,ManualTween,{
+			BackgroundColor3 = Color3.fromHSV(ColorPickerLib.H , 1 , 1)
+		});
+
+		NeverLose.PlayAnimate(ColorMapSelection,ManualTween,{
+			Position = UDim2.fromScale(ColorPickerLib.H,0.5)
+		});
+
+		RGBLabel.Text = "#"..RealColor:ToHex();
+
+		ColorPickerLib.Callback(RealColor);
+	end;
+
+	function ColorPickerLib:SetValue(Color)
+		if typeof(Color) == 'string' then
+			Color = Color3.fromHex(Color);
+		end;
+
+		local H , S , V = Color:ToHSV();
+
+		ColorPickerLib.H = H;
+		ColorPickerLib.S = S;
+		ColorPickerLib.V = V;
+
+		ColorPickerLib:Update();
+	end;
+
+	ColorPickerLib.IsHold = false;
+
+	NeverLose:AddSignal(ColorPickerHandler.InputBegan:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+			ColorPickerLib.IsHold = true;
+		end;
+	end));
+
+	NeverLose:AddSignal(ColorPickerHandler.InputEnded:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+			ColorPickerLib.IsHold = false;
+		end;
+	end));
+
+	NeverLose:AddSignal(ColorMap.InputBegan:Connect(LPH_NO_VIRTUALIZE(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+			ColorPickerLib.IsHold = true;
+
+			while (UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) or ColorPickerLib.IsHold) do task.wait()
+				local ColorY = ColorMap.AbsolutePosition.X
+				local ColorYM = ColorY + ColorMap.AbsoluteSize.X;
+				local Value = math.clamp(Mouse.X, ColorY, ColorYM)
+				local Code = ((Value - ColorY) / (ColorYM - ColorY));
+
+				ColorPickerLib.H = Code;
+				ColorPickerLib:Update();
+			end;
+		end;
+	end)));
+
+	NeverLose:AddSignal(SaViMap.InputBegan:Connect(LPH_NO_VIRTUALIZE(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+			ColorPickerLib.IsHold = true;
+
+			while (UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) or ColorPickerLib.IsHold) do task.wait();
+				local PosX = SaViMap.AbsolutePosition.X;
+				local ScaleX = PosX + SaViMap.AbsoluteSize.X;
+				local Value, PosY = math.clamp(Mouse.X, PosX, ScaleX), SaViMap.AbsolutePosition.Y;
+				local ScaleY = PosY + SaViMap.AbsoluteSize.Y;
+				local Vals = math.clamp(Mouse.Y, PosY, ScaleY);
+
+				ColorPickerLib.S = (Value - PosX) / (ScaleX - PosX);
+				ColorPickerLib.V = (1 - ((Vals - PosY) / (ScaleY - PosY)));
+				ColorPickerLib:Update();
+			end
+		end
+	end)));
+
+	return ColorPickerLib;
+end;
+
 function NeverLose:CreateLogger()
 	if NeverLose.__LogSystem then
 		return 	NeverLose.__LogSystem;
