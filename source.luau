@@ -1514,6 +1514,151 @@ function NeverLose:CreateOptionWindow(Frame: Frame , Zindex)
 			end;
 		end;
 
+		function Payback:AddColorPicker(Config)
+		    Config = NeverLose:ProcessParams(Config , {
+		        Default = Color3.fromRGB(255, 255, 255),
+		        Callback = function() end,
+		        Flag = nil,
+		        Name = "Color"
+		    });
+		
+		    if typeof(Config.Default) == 'string' then
+		        Config.Default = Color3.fromHex(Config.Default:gsub('#',''));
+		    end;
+		
+		    local ColorPickerLib = {};
+		    
+		    local ItemFrame = Instance.new("Frame")
+		    local ItemLabel = Instance.new("TextLabel")
+		    local UICorner3 = Instance.new("UICorner")
+		    local ColorPicker = Instance.new("Frame")
+		    local UICornerCP = Instance.new("UICorner")
+		    local UIStrokeCP = Instance.new("UIStroke")
+		    local ImageLabel = Instance.new("ImageLabel")
+		    local UICorner_2 = Instance.new("UICorner")
+		
+		    ItemFrame.Name = NeverLose.RandomString();
+		    ItemFrame.Parent = OptionHandler
+		    ItemFrame.BackgroundColor3 = Color3.fromRGB(29, 31, 38)
+		    ItemFrame.BackgroundTransparency = 1.000
+		    ItemFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		    ItemFrame.BorderSizePixel = 0
+		    ItemFrame.Size = UDim2.new(1, 0, 0, 25)
+		    ItemFrame.ZIndex = Zindex + 10
+		
+		    ItemLabel.Name = NeverLose.RandomString();
+		    ItemLabel.Parent = ItemFrame
+		    ItemLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		    ItemLabel.BackgroundTransparency = 1.000
+		    ItemLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		    ItemLabel.BorderSizePixel = 0
+		    ItemLabel.Position = UDim2.new(0, 15, 0, 4)
+		    ItemLabel.Size = UDim2.new(1, -50, 0, 15)
+		    ItemLabel.ZIndex = Zindex + 11
+		    ItemLabel.Font = Enum.Font.GothamMedium
+		    ItemLabel.Text = tostring(Config.Name);
+		    ItemLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+		    ItemLabel.TextSize = 13.000
+		    ItemLabel.TextTransparency = 0.5
+		    ItemLabel.TextXAlignment = Enum.TextXAlignment.Left
+		
+		    UICorner3.CornerRadius = UDim.new(0, 10)
+		    UICorner3.Parent = ItemFrame
+		
+		    ColorPicker.Name = NeverLose.RandomString();
+		    ColorPicker.Parent = ItemFrame
+		    ColorPicker.AnchorPoint = Vector2.new(1, 0.5)
+		    ColorPicker.Position = UDim2.new(1, -10, 0.5, 0)
+		    ColorPicker.BackgroundColor3 = Config.Default;
+		    ColorPicker.BackgroundTransparency = 0
+		    ColorPicker.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		    ColorPicker.BorderSizePixel = 0
+		    ColorPicker.ClipsDescendants = true
+		    ColorPicker.Size = UDim2.new(0, 18, 0, 18)
+		    ColorPicker.ZIndex = Zindex + 13
+		
+		    UICornerCP.CornerRadius = UDim.new(0, 4)
+		    UICornerCP.Parent = ColorPicker
+		
+		    UIStrokeCP.Transparency = 0.650
+		    UIStrokeCP.Color = Color3.fromRGB(45, 48, 58)
+		    UIStrokeCP.Parent = ColorPicker
+		
+		    ImageLabel.Parent = ColorPicker
+		    ImageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		    ImageLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		    ImageLabel.BorderSizePixel = 0
+		    ImageLabel.Size = UDim2.new(1, 0, 1, 0)
+		    ImageLabel.ZIndex = Zindex + 11
+		    ImageLabel.Image = "rbxasset://textures/meshPartFallback.png"
+		    ImageLabel.ImageTransparency = 0.9
+		    ImageLabel.BackgroundTransparency = 1;
+		    ImageLabel.ScaleType = Enum.ScaleType.Crop
+		
+		    UICorner_2.CornerRadius = UDim.new(0, 4)
+		    UICorner_2.Parent = ImageLabel
+		
+		    local BackendM = NeverLose:CreateColorPicker(ColorPicker);
+		
+		    BackendM:SetValue(Config.Default)
+		    BackendM.Callback = function(color)
+		        ColorPicker.BackgroundColor3 = color;
+		        Config.Default = color;
+		        Config.Callback(Config.Default);
+		    end;
+		
+		    local signal;
+		    NeverLose:CreateInput(ColorPicker , function()
+		        if signal then
+		            signal:Disconnect();
+		            signal = nil;
+		        end;
+		
+		        BackendM.SetRender(true);
+		
+		        signal = UserInputService.InputBegan:Connect(function(Input)
+		            if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+		                if not NeverLose:IsMouseOverFrame(ColorPicker) and not NeverLose:IsMouseOverFrame(BackendM.Root) then
+		                    if signal then
+		                        signal:Disconnect();
+		                        signal = nil;
+		                    end;
+		
+		                    BackendM.SetRender(false);
+		                end;
+		            end;
+		        end)
+		    end);
+		
+		    NeverLose:AddSignal(ItemFrame.MouseEnter:Connect(function()
+		        NeverLose.PlayAnimate(ItemFrame, SlowyTween, {
+		            BackgroundTransparency = 0.5
+		        })
+		    end));
+		
+		    NeverLose:AddSignal(ItemFrame.MouseLeave:Connect(function()
+		        NeverLose.PlayAnimate(ItemFrame, SlowyTween, {
+		            BackgroundTransparency = 1
+		        })
+		    end));
+		
+		    function ColorPickerLib:GetValue()
+		        return Config.Default;
+		    end;
+		
+		    function ColorPickerLib:SetValue(v)
+		        Config.Default = v;
+		        ColorPicker.BackgroundColor3 = v;
+		        BackendM:SetValue(Config.Default)
+		    end;
+		
+		    if Config.Flag then
+		        NeverLose.Flags[Config.Flag] = ColorPickerLib;
+		    end;
+		
+		    return ColorPickerLib;
+		end
+
 		DropdownLib:Generate();
 
 		function DropdownLib:GetValue()
