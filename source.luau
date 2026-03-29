@@ -1348,240 +1348,60 @@ function NeverLose:CreateOptionWindow(Frame: Frame , Zindex)
 	Payback.Signal = Window.Signal;
 
 	function Payback:AddDropdownF(Config)
-	    Config = NeverLose:ProcessParams(Config , {
-	        Default = nil,
-	        Values = {},
-	        Multi = false,
-	        Callback = function() end,
-	        AutoUpdate = false,
-	        Flag = nil,
-	        Size = 100
-	    })
-	
-	    Config.Default = NeverLose.ProcessDropdown(Config.Default);
-	
-	    local DropdownLib = {
-	        Signals = {},
-	        Refuse = {},
-	    };
-	
-	    DropdownLib.IsMatch = function(v1)
-	        if typeof(Config.Default) == 'table' then
-	            if Config.Default[v1] or table.find(Config.Default, v1) then
-	                return true;
-	            end
-	        end
-	        if Config.Default == v1 then
-	            return true;
-	        end;
-	        return false;
-	    end;
-	
-	    function DropdownLib:Generate()
-	        for i, v in next, DropdownLib.Signals do
-	            if typeof(v) == "RBXScriptConnection" then
-	                v:Disconnect();
-	            end
-	        end;
-	        table.clear(DropdownLib.Signals);
-	        table.clear(DropdownLib.Refuse);
-	
-	        for i, Value in next, Config.Values do
-	            local ItemFrame = Instance.new("Frame")
-	            local ItemLabel = Instance.new("TextLabel")
-	            local UICorner = Instance.new("UICorner")
-	
-	            ItemFrame.Name = NeverLose.RandomString();
-	            ItemFrame.Parent = OptionHandler
-	            ItemFrame.BackgroundColor3 = Color3.fromRGB(29, 31, 38)
-	            ItemFrame.BackgroundTransparency = 1.000
-	            ItemFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	            ItemFrame.BorderSizePixel = 0
-	            ItemFrame.Size = UDim2.new(1, 0, 0, 25)
-	            ItemFrame.ZIndex = Zindex + 10
-	
-	            ItemLabel.Name = NeverLose.RandomString();
-	            ItemLabel.Parent = ItemFrame
-	            ItemLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	            ItemLabel.BackgroundTransparency = 1.000
-	            ItemLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	            ItemLabel.BorderSizePixel = 0
-	            ItemLabel.Position = UDim2.new(0, 15, 0, 4)
-	            ItemLabel.Size = UDim2.new(1, -20, 0, 15)
-	            ItemLabel.ZIndex = Zindex + 11
-	            ItemLabel.Font = Enum.Font.GothamMedium
-	            ItemLabel.Text = tostring(Value);
-	            ItemLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-	            ItemLabel.TextSize = 13.000
-	            ItemLabel.TextTransparency = 0.5
-	            ItemLabel.TextXAlignment = Enum.TextXAlignment.Left
-	
-	            UICorner.CornerRadius = UDim.new(0, 10)
-	            UICorner.Parent = ItemFrame
-	
-	            table.insert(DropdownLib.Signals, ItemFrame);
-	
-	            local MIcon, MarkItem = nil, nil;
-	
-	            if Config.Multi then
-	                local Icon = Instance.new("TextLabel")
-	                Icon.Parent = ItemFrame;
-	                Icon.AnchorPoint = Vector2.new(0, 0.5)
-	                Icon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	                Icon.BackgroundTransparency = 1.000
-	                Icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	                Icon.BorderSizePixel = 0
-	                Icon.Position = UDim2.new(0, 5, 0.5, 0)
-	                Icon.Size = UDim2.new(0, 20, 0, 20)
-	                Icon.ZIndex = Zindex + 12
-	                Icon.FontFace = NeverLose.BuiltInBold;
-	                Icon.Text = "check"
-	                Icon.TextColor3 = Color3.fromRGB(223, 223, 223)
-	                Icon.TextSize = 18.000
-	                Icon.TextTransparency = 1
-	                Icon.TextWrapped = true;
-	
-	                MarkItem = function()
-	                    if DropdownLib.IsMatch(Value) then
-	                        NeverLose.PlayAnimate(ItemLabel, SlowyTween, {
-	                            TextTransparency = 0.200,
-	                            Position = UDim2.new(0, 30, 0, 4)
-	                        })
-	                        NeverLose.PlayAnimate(Icon, SlowyTween, {
-	                            TextTransparency = 0.250
-	                        })
-	                    else
-	                        NeverLose.PlayAnimate(Icon, SlowyTween, {
-	                            TextTransparency = 1
-	                        })
-	                        NeverLose.PlayAnimate(ItemLabel, SlowyTween, {
-	                            TextTransparency = 0.5,
-	                            Position = UDim2.new(0, 15, 0, 4)
-	                        })
-	                    end;
-	                end;
-	
-	                MIcon = Icon;
-	            else
-	                MarkItem = function()
-	                    if DropdownLib.IsMatch(Value) then
-	                        NeverLose.PlayAnimate(ItemLabel, SlowyTween, {
-	                            TextTransparency = 0.200
-	                        })
-	                    else
-	                        NeverLose.PlayAnimate(ItemLabel, SlowyTween, {
-	                            TextTransparency = 0.5
-	                        })
-	                    end;
-	                end;
-	            end;
-	
-	            MarkItem();
-	            table.insert(DropdownLib.Refuse, MarkItem)
-	
-	            table.insert(DropdownLib.Signals, ItemFrame.MouseEnter:Connect(function()
-	                NeverLose.PlayAnimate(ItemFrame, SlowyTween, {
-	                    BackgroundTransparency = 0.5
-	                })
-	            end));
-	
-	            table.insert(DropdownLib.Signals, ItemFrame.MouseLeave:Connect(function()
-	                NeverLose.PlayAnimate(ItemFrame, SlowyTween, {
-	                    BackgroundTransparency = 1
-	                })
-	            end));
-	
-	            if Config.Multi then
-	                local _, bth_signal = NeverLose:CreateInput(ItemFrame, function()
-	                    Config.Default[Value] = not Config.Default[Value];
-	                    MarkItem();
-	                    Config.Callback(Config.Default);
-	                end);
-	                table.insert(DropdownLib.Signals, bth_signal);
-	            else
-	                local _, bth_signal = NeverLose:CreateInput(ItemFrame, function()
-	                    Config.Default = Value;
-	                    for _, v in next, DropdownLib.Refuse do
-	                        task.spawn(v);
-	                    end;
-	                    Config.Callback(Config.Default);
-	                end);
-	                table.insert(DropdownLib.Signals, bth_signal);
-	            end;
-	        end;
-	    end;
-	
-	    DropdownLib:Generate();
-	
-	    function DropdownLib:GetValue()
-	        return Config.Default;
-	    end;
-	
-	    function DropdownLib:SetValue(v)
-	        Config.Default = NeverLose.ProcessDropdown(v);
-	        for _, func in next, DropdownLib.Refuse do
-	            task.spawn(func);
-	        end;
-	        Config.Callback(Config.Default);
-	    end;
-	
-	    function DropdownLib:SetValues(a)
-	        Config.Values = a;
-	        -- Удаляем старые элементы
-	        for _, v in next, DropdownLib.Signals do
-	            if typeof(v) == "Instance" and v:IsA("Frame") then
-	                v:Destroy();
-	            elseif typeof(v) == "RBXScriptConnection" then
-	                v:Disconnect();
-	            end
-	        end;
-	        DropdownLib:Generate();
-	    end;
-	
-	    if Config.Flag then
-	        NeverLose.Flags[Config.Flag] = DropdownLib;
-	    end;
-	
-	    return DropdownLib;
-	end
+		Config = NeverLose:ProcessParams(Config , {
+			Default = nil,
+			Values = {},
+			Multi = false,
+			Callback = function() end,
+			AutoUpdate = false,
+			Flag = nil,
+			Size = 100
+		})
+
+		Config.Default = NeverLose.ProcessDropdown(Config.Default);
+
+		local DropdownLib = {
+			Signals = {},
+			Refuse = {},
+		};
 
 		DropdownLib.IsMatch = function(v1)
-			if typeof(Config.Default) =='table' then
-				if Config.Default[v1] or table.find(Config.Default , v1) then
+			if typeof(Config.Default) == 'table' then
+				if Config.Default[v1] or table.find(Config.Default, v1) then
 					return true;
 				end
 			end
 			if Config.Default == v1 then
 				return true;
 			end;
+			return false;
 		end;
 
 		function DropdownLib:Generate()
-			for i,v in next , DropdownLib.RootItem:GetChildren() do
-				if v:IsA('Frame') then
+			-- Очищаем старые элементы
+			for i, v in next, DropdownLib.Signals do
+				if typeof(v) == "Instance" and v:IsA("Frame") then
 					v:Destroy();
-				end;
-			end;
-			for i,v in next , DropdownLib.Signals do
-				v:Disconnect();
+				elseif typeof(v) == "RBXScriptConnection" then
+					v:Disconnect();
+				end
 			end;
 			table.clear(DropdownLib.Signals);
 			table.clear(DropdownLib.Refuse);
 
-			local Lastone;
-			for i,Value in next , Config.Values do
+			for i, Value in next, Config.Values do
 				local ItemFrame = Instance.new("Frame")
 				local ItemLabel = Instance.new("TextLabel")
 				local UICorner3 = Instance.new("UICorner")
 
 				ItemFrame.Name = NeverLose.RandomString();
-				ItemFrame.Parent = DropdownLib.RootItem
+				ItemFrame.Parent = OptionHandler
 				ItemFrame.BackgroundColor3 = Color3.fromRGB(29, 31, 38)
 				ItemFrame.BackgroundTransparency = 1.000
 				ItemFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 				ItemFrame.BorderSizePixel = 0
 				ItemFrame.Size = UDim2.new(1, 0, 0, 25)
-				ItemFrame.ZIndex = Zindex + 1258
+				ItemFrame.ZIndex = Zindex + 10
 
 				ItemLabel.Name = NeverLose.RandomString();
 				ItemLabel.Parent = ItemFrame
@@ -1590,22 +1410,21 @@ function NeverLose:CreateOptionWindow(Frame: Frame , Zindex)
 				ItemLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
 				ItemLabel.BorderSizePixel = 0
 				ItemLabel.Position = UDim2.new(0, 15, 0, 4)
-				ItemLabel.Size = UDim2.new(0,1, 0, 15)
-				ItemLabel.ZIndex = Zindex + 1258
+				ItemLabel.Size = UDim2.new(1, -20, 0, 15)
+				ItemLabel.ZIndex = Zindex + 11
 				ItemLabel.Font = Enum.Font.GothamMedium
 				ItemLabel.Text = tostring(Value);
 				ItemLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 				ItemLabel.TextSize = 13.000
-				ItemLabel.TextTransparency = 0.200
+				ItemLabel.TextTransparency = 0.5
 				ItemLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 				UICorner3.CornerRadius = UDim.new(0, 10)
 				UICorner3.Parent = ItemFrame
-				
-				local sizetext = game:GetService("TextService"):GetTextSize(ItemLabel.Text , ItemLabel.TextSize,ItemLabel.Font,Vector2.new(math.huge,math.huge));
-				DropdownLib.ExtentSize = math.max(DropdownLib.ExtentSize , sizetext.X);
 
-				local MIcon , MarkItem = nil , nil;
+				table.insert(DropdownLib.Signals, ItemFrame);
+
+				local MIcon, MarkItem = nil, nil;
 
 				if Config.Multi then
 					local Icon = Instance.new("TextLabel")
@@ -1617,7 +1436,7 @@ function NeverLose:CreateOptionWindow(Frame: Frame , Zindex)
 					Icon.BorderSizePixel = 0
 					Icon.Position = UDim2.new(0, 5, 0.5, 0)
 					Icon.Size = UDim2.new(0, 20, 0, 20)
-					Icon.ZIndex = Zindex + 1259
+					Icon.ZIndex = Zindex + 12
 					Icon.FontFace = NeverLose.BuiltInBold;
 					Icon.Text = "check"
 					Icon.TextColor3 = Color3.fromRGB(223, 223, 223)
@@ -1625,21 +1444,20 @@ function NeverLose:CreateOptionWindow(Frame: Frame , Zindex)
 					Icon.TextTransparency = 1
 					Icon.TextWrapped = true;
 
-					local VisiblewOfMult = function()
+					MarkItem = function()
 						if DropdownLib.IsMatch(Value) then
-							NeverLose.PlayAnimate(ItemLabel , VSlowTween , {
+							NeverLose.PlayAnimate(ItemLabel, SlowyTween, {
 								TextTransparency = 0.200,
 								Position = UDim2.new(0, 30, 0, 4)
 							})
-							NeverLose.PlayAnimate(Icon , vs , {
+							NeverLose.PlayAnimate(Icon, SlowyTween, {
 								TextTransparency = 0.250
 							})
-							Lastone = ItemLabel;
 						else
-							NeverLose.PlayAnimate(Icon , SlowyTween , {
+							NeverLose.PlayAnimate(Icon, SlowyTween, {
 								TextTransparency = 1
 							})
-							NeverLose.PlayAnimate(ItemLabel , VSlowTween , {
+							NeverLose.PlayAnimate(ItemLabel, SlowyTween, {
 								TextTransparency = 0.5,
 								Position = UDim2.new(0, 15, 0, 4)
 							})
@@ -1647,72 +1465,51 @@ function NeverLose:CreateOptionWindow(Frame: Frame , Zindex)
 					end;
 
 					MIcon = Icon;
-					MarkItem = VisiblewOfMult;
 				else
-					local DefaultVisible = function()
+					MarkItem = function()
 						if DropdownLib.IsMatch(Value) then
-							NeverLose.PlayAnimate(ItemLabel , SlowyTween , {
+							NeverLose.PlayAnimate(ItemLabel, SlowyTween, {
 								TextTransparency = 0.200
 							})
-							Lastone = ItemLabel;
 						else
-							NeverLose.PlayAnimate(ItemLabel , SlowyTween , {
+							NeverLose.PlayAnimate(ItemLabel, SlowyTween, {
 								TextTransparency = 0.5
 							})
 						end;
 					end;
-
-					MarkItem = DefaultVisible;
 				end;
 
 				MarkItem();
-				table.insert(DropdownLib.Refuse , MarkItem)
+				table.insert(DropdownLib.Refuse, MarkItem)
 
-				table.insert(DropdownLib.Signals,ItemFrame.MouseEnter:Connect(function()
-					NeverLose.PlayAnimate(ItemFrame , SlowyTween , {
-						BackgroundTransparency = 0.1
+				table.insert(DropdownLib.Signals, ItemFrame.MouseEnter:Connect(function()
+					NeverLose.PlayAnimate(ItemFrame, SlowyTween, {
+						BackgroundTransparency = 0.5
 					})
 				end));
 
-				table.insert(DropdownLib.Signals,ItemFrame.MouseLeave:Connect(function()
-					NeverLose.PlayAnimate(ItemFrame , SlowyTween , {
+				table.insert(DropdownLib.Signals, ItemFrame.MouseLeave:Connect(function()
+					NeverLose.PlayAnimate(ItemFrame, SlowyTween, {
 						BackgroundTransparency = 1
 					})
 				end));
 
-				table.insert(DropdownLib.Signals , DropdownLib.OpenSignal:Connect(function(val)
-					if val then
-						MarkItem();
-					else
-						NeverLose.PlayAnimate(ItemLabel , SlowyTween , {
-							TextTransparency = 1
-						})
-						if MIcon then
-							NeverLose.PlayAnimate(MIcon , SlowyTween , {
-								TextTransparency = 1
-							})
-						end;
-					end;
-				end));
-
 				if Config.Multi then
-					local _,bth_signal = NeverLose:CreateInput(ItemFrame , function()
+					local _, bth_signal = NeverLose:CreateInput(ItemFrame, function()
 						Config.Default[Value] = not Config.Default[Value];
 						MarkItem();
-						BasedLabel.Text = NeverLose.ParseDropdown(Config.Default);
 						Config.Callback(Config.Default);
 					end);
-					table.insert(DropdownLib.Signals , bth_signal);
+					table.insert(DropdownLib.Signals, bth_signal);
 				else
-					local _,bth_signal = NeverLose:CreateInput(ItemFrame , function()
+					local _, bth_signal = NeverLose:CreateInput(ItemFrame, function()
 						Config.Default = Value;
-						for i,v in next , DropdownLib.Refuse do
+						for _, v in next, DropdownLib.Refuse do
 							task.spawn(v);
 						end;
-						BasedLabel.Text = NeverLose.ParseDropdown(Config.Default);
 						Config.Callback(Config.Default);
 					end);
-					table.insert(DropdownLib.Signals , bth_signal);
+					table.insert(DropdownLib.Signals, bth_signal);
 				end;
 			end;
 		end;
@@ -1724,19 +1521,23 @@ function NeverLose:CreateOptionWindow(Frame: Frame , Zindex)
 		end;
 
 		function DropdownLib:SetValue(v)
-			Config.Default = v;
-			BasedLabel.Text = NeverLose.ParseDropdown(Config.Default);
-			for i,v in next , DropdownLib.Refuse do
-				task.spawn(v);
+			Config.Default = NeverLose.ProcessDropdown(v);
+			for _, func in next, DropdownLib.Refuse do
+				task.spawn(func);
 			end;
 			Config.Callback(Config.Default);
 		end;
 
 		function DropdownLib:SetValues(a)
 			Config.Values = a;
-			if not Config.AutoUpdate then
-				DropdownLib:Generate();
+			for _, v in next, DropdownLib.Signals do
+				if typeof(v) == "Instance" and v:IsA("Frame") then
+					v:Destroy();
+				elseif typeof(v) == "RBXScriptConnection" then
+					v:Disconnect();
+				end
 			end;
+			DropdownLib:Generate();
 		end;
 
 		if Config.Flag then
@@ -1748,6 +1549,7 @@ function NeverLose:CreateOptionWindow(Frame: Frame , Zindex)
 
 	return Payback;
 end;
+
 NeverLose.KeyEnum = {
 	One = '1',
 	Two = '2',
