@@ -2322,6 +2322,9 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 		local ImageLabel = Instance.new("ImageLabel")
 		local UICorner_2 = Instance.new("UICorner")
 
+		ColorPicker.Name = "00_ColorPicker_" .. NeverLose.RandomString()
+		ColorPicker.LayoutOrder = -100
+
 		ColorPicker.Name = NeverLose.RandomString();
 		ColorPicker.Parent = Handler
 		ColorPicker.BackgroundColor3 = Config.Default;
