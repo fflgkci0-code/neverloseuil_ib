@@ -2292,26 +2292,14 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 		UICorner_4.CornerRadius = UDim.new(1, 0)
 		UICorner_4.Parent = SlideMoving
 	
-		local PlayerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-		local TooltipGui = PlayerGui:FindFirstChild("NL_SliderOptTooltips")
-		if not TooltipGui then
-			TooltipGui = Instance.new("ScreenGui")
-			TooltipGui.Name = "NL_SliderOptTooltips"
-			TooltipGui.ResetOnSpawn = false
-			TooltipGui.DisplayOrder = 99999
-			TooltipGui.IgnoreGuiInset = true
-			TooltipGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-			TooltipGui.Parent = PlayerGui
-		end
-	
 		TooltipFrame.Name = NeverLose.RandomString()
-		TooltipFrame.Parent = TooltipGui
+		TooltipFrame.Parent = NeverLose.ScreenGui
 		TooltipFrame.AnchorPoint = Vector2.new(0.5, 1)
 		TooltipFrame.BackgroundColor3 = Color3.fromRGB(26, 28, 36)
 		TooltipFrame.BackgroundTransparency = 1
 		TooltipFrame.BorderSizePixel = 0
 		TooltipFrame.Size = UDim2.new(0, 36, 0, 20)
-		TooltipFrame.ZIndex = 99999
+		TooltipFrame.ZIndex = ZINdex + 124
 		TooltipFrame.Visible = false
 	
 		TooltipCorner.CornerRadius = UDim.new(0, 4)
@@ -2333,7 +2321,7 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 		TooltipLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 		TooltipLabel.TextSize = 10
 		TooltipLabel.TextTransparency = 1
-		TooltipLabel.ZIndex = 100000
+		TooltipLabel.ZIndex = ZINdex + 125
 	
 		TooltipTail.Name = NeverLose.RandomString()
 		TooltipTail.Parent = TooltipFrame
@@ -2344,7 +2332,7 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 		TooltipTail.Position = UDim2.new(0.5, 0, 1, -3)
 		TooltipTail.Size = UDim2.new(0, 6, 0, 6)
 		TooltipTail.Rotation = 45
-		TooltipTail.ZIndex = 99998
+		TooltipTail.ZIndex = ZINdex + 123
 	
 		TooltipTailCorner.CornerRadius = UDim.new(0, 1)
 		TooltipTailCorner.Parent = TooltipTail
@@ -2366,7 +2354,7 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 			local absPos = SlideFrame.AbsolutePosition
 			local absSize = SlideFrame.AbsoluteSize
 			local xPos = absPos.X + absSize.X * scale
-			local yPos = absPos.Y - 8
+			local yPos = absPos.Y + 12
 	
 			TooltipFrame.Position = UDim2.new(0, xPos, 0, yPos)
 		end
