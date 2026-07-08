@@ -2349,13 +2349,13 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 			local textSize = TextService:GetTextSize(txt, 10, Enum.Font.GothamMedium, Vector2.new(math.huge, math.huge))
 			TooltipFrame.Size = UDim2.new(0, textSize.X + 10, 0, 20)
 			TooltipLabel.Text = txt
-	
+		
 			local scale = SliderLib.GetSize()
 			local absPos = SlideFrame.AbsolutePosition
 			local absSize = SlideFrame.AbsoluteSize
 			local xPos = absPos.X + absSize.X * scale
-			local yPos = absPos.Y - 20
-	
+			local yPos = absPos.Y + absSize.Y + 20
+		
 			TooltipFrame.Position = UDim2.new(0, xPos, 0, yPos)
 		end
 	
