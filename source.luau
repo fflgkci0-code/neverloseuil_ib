@@ -2354,7 +2354,7 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 			local absPos = SlideFrame.AbsolutePosition
 			local absSize = SlideFrame.AbsoluteSize
 			local xPos = absPos.X + absSize.X * scale
-			local yPos = absPos.Y + 8
+			local yPos = absPos.Y + 3
 	
 			TooltipFrame.Position = UDim2.new(0, xPos, 0, yPos)
 		end
