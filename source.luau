@@ -2209,6 +2209,378 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 		return SliderLib;
 	end;
 
+	function handle:AddSliderOpt(Config)
+	    Config = NeverLose:ProcessParams(Config, {
+	        Default = 50,
+	        Min = 0,
+	        Max = 100,
+	        Type = "",
+	        Rounding = 0,
+	        Nums = {},
+	        Flag = nil,
+	        Size = 125,
+	        Callback = EmptyFunction,
+	    });
+	
+	    local SliderLib = {};
+	
+	    SliderLib.GetSize = LPH_NO_VIRTUALIZE(function()
+	        return (Config.Default - Config.Min) / (Config.Max - Config.Min);
+	    end);
+	
+	    local Slider = Instance.new("Frame")
+	    local UICorner = Instance.new("UICorner")
+	
+	    local TooltipFrame = Instance.new("Frame")
+	    local TooltipCorner = Instance.new("UICorner")
+	    local TooltipStroke = Instance.new("UIStroke")
+	    local TooltipLabel = Instance.new("TextLabel")
+	    local TooltipTail = Instance.new("Frame") -- маленький треугольник/хвостик под тултипом
+	    local TooltipTailCorner = Instance.new("UICorner")
+	
+	    local SlideMain = Instance.new("Frame")
+	    local SlideFrame = Instance.new("Frame")
+	    local UICorner_3 = Instance.new("UICorner")
+	    local SlideMoving = Instance.new("Frame")
+	    local UICorner_4 = Instance.new("UICorner")
+	
+	    local ScreenGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("NL_SliderTooltips")
+	
+	    if not ScreenGui then
+	        ScreenGui = Instance.new("ScreenGui")
+	        ScreenGui.Name = "NL_SliderTooltips"
+	        ScreenGui.ResetOnSpawn = false
+	        ScreenGui.DisplayOrder = 9999
+	        ScreenGui.IgnoreGuiInset = true
+	        ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	        ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+	    end
+	
+	    local WorldTooltip = Instance.new("Frame")
+	    local WorldTooltipCorner = Instance.new("UICorner")
+	    local WorldTooltipStroke = Instance.new("UIStroke")
+	    local WorldTooltipLabel = Instance.new("TextLabel")
+	    local WorldTooltipTail = Instance.new("Frame")
+	    local WorldTooltipTailCorner = Instance.new("UICorner")
+	
+	    WorldTooltip.Name = NeverLose.RandomString()
+	    WorldTooltip.Parent = ScreenGui
+	    WorldTooltip.AnchorPoint = Vector2.new(0.5, 1)
+	    WorldTooltip.BackgroundColor3 = Color3.fromRGB(26, 28, 36)
+	    WorldTooltip.BorderSizePixel = 0
+	    WorldTooltip.Size = UDim2.new(0, 36, 0, 20)
+	    WorldTooltip.Visible = false
+	    WorldTooltip.ZIndex = 9999
+	    WorldTooltip.BackgroundTransparency = 0
+	
+	    WorldTooltipCorner.CornerRadius = UDim.new(0, 4)
+	    WorldTooltipCorner.Parent = WorldTooltip
+	
+	    WorldTooltipStroke.Color = Color3.fromRGB(45, 48, 58)
+	    WorldTooltipStroke.Transparency = 0.5
+	    WorldTooltipStroke.Thickness = 1
+	    WorldTooltipStroke.Parent = WorldTooltip
+	
+	    WorldTooltipLabel.Name = NeverLose.RandomString()
+	    WorldTooltipLabel.Parent = WorldTooltip
+	    WorldTooltipLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+	    WorldTooltipLabel.BackgroundTransparency = 1
+	    WorldTooltipLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+	    WorldTooltipLabel.Size = UDim2.new(1, -4, 1, 0)
+	    WorldTooltipLabel.Font = Enum.Font.GothamMedium
+	    WorldTooltipLabel.Text = tostring(Config.Default) .. tostring(Config.Type)
+	    WorldTooltipLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	    WorldTooltipLabel.TextSize = 10
+	    WorldTooltipLabel.TextTransparency = 0
+	    WorldTooltipLabel.ZIndex = 10000
+	
+	    WorldTooltipTail.Name = NeverLose.RandomString()
+	    WorldTooltipTail.Parent = WorldTooltip
+	    WorldTooltipTail.AnchorPoint = Vector2.new(0.5, 0)
+	    WorldTooltipTail.BackgroundColor3 = Color3.fromRGB(26, 28, 36)
+	    WorldTooltipTail.BorderSizePixel = 0
+	    WorldTooltipTail.Position = UDim2.new(0.5, 0, 1, -2)
+	    WorldTooltipTail.Size = UDim2.new(0, 6, 0, 6)
+	    WorldTooltipTail.Rotation = 45
+	    WorldTooltipTail.ZIndex = 9998
+	
+	    WorldTooltipTailCorner.CornerRadius = UDim.new(0, 1)
+	    WorldTooltipTailCorner.Parent = WorldTooltipTail
+	
+	    Slider.Name = NeverLose.RandomString()
+	    Slider.Parent = Handler
+	    Slider.BackgroundColor3 = Color3.fromRGB(26, 28, 36)
+	    Slider.BackgroundTransparency = 1
+	    Slider.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	    Slider.BorderSizePixel = 0
+	    Slider.ClipsDescendants = false
+	    Slider.Size = UDim2.new(0, Config.Size, 0, 18)
+	    Slider.ZIndex = ZINdex + 13
+	    Slider.LayoutOrder = -(#Handler:GetChildren() + 5)
+	
+	    UICorner.CornerRadius = UDim.new(0, 4)
+	    UICorner.Parent = Slider
+	
+	    SlideMain.Name = NeverLose.RandomString()
+	    SlideMain.Parent = Slider
+	    SlideMain.AnchorPoint = Vector2.new(0, 0.5)
+	    SlideMain.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	    SlideMain.BackgroundTransparency = 1
+	    SlideMain.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	    SlideMain.BorderSizePixel = 0
+	    SlideMain.Position = UDim2.new(0, 0, 0.5, 0)
+	    SlideMain.Size = UDim2.new(1, 0, 0, 18) -- вся ширина
+	    SlideMain.ZIndex = ZINdex + 13
+	
+	    SlideFrame.Name = NeverLose.RandomString()
+	    SlideFrame.Parent = SlideMain
+	    SlideFrame.AnchorPoint = Vector2.new(0, 0.5)
+	    SlideFrame.BackgroundColor3 = Color3.fromRGB(30, 29, 36)
+	    SlideFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	    SlideFrame.BorderSizePixel = 0
+	    SlideFrame.Position = UDim2.new(0, 0, 0.5, 0)
+	    SlideFrame.Size = UDim2.new(1, 0, 0, 5)
+	    SlideFrame.ZIndex = ZINdex + 13
+	
+	    UICorner_3.CornerRadius = UDim.new(1, 0)
+	    UICorner_3.Parent = SlideFrame
+	
+	    SlideMoving.Name = NeverLose.RandomString()
+	    SlideMoving.Parent = SlideFrame
+	    SlideMoving.BackgroundColor3 = NeverLose.AccentColor
+	    SlideMoving.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	    SlideMoving.BorderSizePixel = 0
+	    SlideMoving.Size = UDim2.new(SliderLib.GetSize(), 0, 1, 0)
+	    SlideMoving.ZIndex = ZINdex + 14
+	
+	    UICorner_4.CornerRadius = UDim.new(1, 0)
+	    UICorner_4.Parent = SlideMoving
+	
+	    local function GetValueText()
+	        if Config.Nums and Config.Nums[Config.Default] then
+	            return tostring(Config.Nums[Config.Default])
+	        end
+	        return tostring(Config.Default) .. tostring(Config.Type)
+	    end
+	
+	    local function UpdateTooltipPosition()
+	        local scale = SliderLib.GetSize()
+	        local absPos = SlideFrame.AbsolutePosition
+	        local absSize = SlideFrame.AbsoluteSize
+	
+	        local xPos = absPos.X + absSize.X * scale
+	        local yPos = absPos.Y - 6
+	
+	        WorldTooltip.Position = UDim2.new(0, xPos, 0, yPos)
+	
+	        local txt = GetValueText()
+	        local textSize = game:GetService("TextService"):GetTextSize(txt, 10, Enum.Font.GothamMedium, Vector2.new(math.huge, math.huge))
+	        WorldTooltip.Size = UDim2.new(0, textSize.X + 10, 0, 20)
+	        WorldTooltipLabel.Text = txt
+	    end
+	
+	    local isHovered = false
+	    local isHold = false
+	
+	    local tooltipTween_show = nil
+	    local tooltipTween_hide = nil
+	
+	    local TweenService = game:GetService("TweenService")
+	    local SlowyInfo = TweenInfo.new(0.18, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+	
+	    local function ShowTooltip()
+	        if tooltipTween_hide then tooltipTween_hide:Cancel() end
+	
+	        UpdateTooltipPosition()
+	        WorldTooltip.Visible = true
+	        WorldTooltip.BackgroundTransparency = 1
+	        WorldTooltipLabel.TextTransparency = 1
+	        WorldTooltipStroke.Transparency = 1
+	        WorldTooltipTail.BackgroundTransparency = 1
+	
+	        tooltipTween_show = TweenService:Create(WorldTooltip, SlowyInfo, {
+	            BackgroundTransparency = 0
+	        })
+	        tooltipTween_show:Play()
+	
+	        TweenService:Create(WorldTooltipLabel, SlowyInfo, {
+	            TextTransparency = 0
+	        }):Play()
+	
+	        TweenService:Create(WorldTooltipStroke, SlowyInfo, {
+	            Transparency = 0.5
+	        }):Play()
+	
+	        TweenService:Create(WorldTooltipTail, SlowyInfo, {
+	            BackgroundTransparency = 0
+	        }):Play()
+	    end
+	
+	    local function HideTooltip()
+	        if tooltipTween_show then tooltipTween_show:Cancel() end
+	
+	        tooltipTween_hide = TweenService:Create(WorldTooltip, SlowyInfo, {
+	            BackgroundTransparency = 1
+	        })
+	        tooltipTween_hide:Play()
+	
+	        TweenService:Create(WorldTooltipLabel, SlowyInfo, {
+	            TextTransparency = 1
+	        }):Play()
+	
+	        TweenService:Create(WorldTooltipStroke, SlowyInfo, {
+	            Transparency = 1
+	        }):Play()
+	
+	        TweenService:Create(WorldTooltipTail, SlowyInfo, {
+	            BackgroundTransparency = 1
+	        }):Play()
+	
+	        tooltipTween_hide.Completed:Connect(function()
+	            if WorldTooltip.BackgroundTransparency >= 1 then
+	                WorldTooltip.Visible = false
+	            end
+	        end)
+	    end
+	
+	    -- Обновление значения слайдера
+	    local ManualTween = TweenInfo.new(0.07, Enum.EasingStyle.Linear)
+	
+	    local function Update(Input)
+	        local SizeScale = math.clamp(
+	            ((Input.Position.X) - SlideMain.AbsolutePosition.X) / SlideMain.AbsoluteSize.X,
+	            0, 1
+	        )
+	        local Main = ((Config.Max - Config.Min) * SizeScale) + Config.Min
+	        local Value = NeverLose.Rounding(Main, Config.Rounding)
+	
+	        Config.Default = Value
+	
+	        TweenService:Create(SlideMoving, ManualTween, {
+	            Size = UDim2.new(SliderLib.GetSize(), 0, 1, 0)
+	        }):Play()
+	
+	        -- Обновляем тултип в реальном времени
+	        if isHovered or isHold then
+	            UpdateTooltipPosition()
+	        end
+	
+	        Config.Callback(Value)
+	    end
+	
+	    -- Входные события
+	    NeverLose:AddSignal(SlideMain.InputBegan:Connect(LPH_NO_VIRTUALIZE(function(Input)
+	        if Input.UserInputType == Enum.UserInputType.MouseButton1
+	            or Input.UserInputType == Enum.UserInputType.Touch then
+	            isHold = true
+	            Update(Input)
+	            ShowTooltip()
+	        end
+	    end)))
+	
+	    NeverLose:AddSignal(SlideMain.InputEnded:Connect(LPH_NO_VIRTUALIZE(function(Input)
+	        if Input.UserInputType == Enum.UserInputType.MouseButton1
+	            or Input.UserInputType == Enum.UserInputType.Touch then
+	            if game:GetService("UserInputService").TouchEnabled then
+	                if not NeverLose:IsMouseOverFrame(SlideMain) then
+	                    isHold = false
+	                    if not isHovered then HideTooltip() end
+	                end
+	            else
+	                isHold = false
+	                if not isHovered then HideTooltip() end
+	            end
+	        end
+	    end)))
+	
+	    NeverLose:AddSignal(game:GetService("UserInputService").InputChanged:Connect(LPH_NO_VIRTUALIZE(function(Input)
+	        if isHold then
+	            if Input.UserInputType == Enum.UserInputType.MouseMovement
+	                or Input.UserInputType == Enum.UserInputType.Touch then
+	                if game:GetService("UserInputService").TouchEnabled then
+	                    if not NeverLose:IsMouseOverFrame(SlideMain) then
+	                        isHold = false
+	                        if not isHovered then HideTooltip() end
+	                    else
+	                        Update(Input)
+	                    end
+	                else
+	                    Update(Input)
+	                end
+	            end
+	        end
+	    end)))
+	
+	    -- Наведение мыши
+	    NeverLose:AddSignal(SlideMain.MouseEnter:Connect(LPH_NO_VIRTUALIZE(function()
+	        isHovered = true
+	        ShowTooltip()
+	    end)))
+	
+	    NeverLose:AddSignal(SlideMain.MouseLeave:Connect(LPH_NO_VIRTUALIZE(function()
+	        isHovered = false
+	        if not isHold then
+	            HideTooltip()
+	        end
+	    end)))
+	
+	    -- SetRender (скрытие/показ всего слайдера)
+	    SliderLib.SetRender = LPH_NO_VIRTUALIZE(function(value)
+	        if value then
+	            NeverLose.PlayAnimate(SlideFrame, SlowyTween, {
+	                BackgroundTransparency = 0
+	            })
+	            NeverLose.PlayAnimate(SlideMoving, SlowyTween, {
+	                BackgroundTransparency = 0,
+	                Size = UDim2.new(SliderLib.GetSize(), 0, 1, 0)
+	            })
+	        else
+	            NeverLose.PlayAnimate(SlideFrame, SlowyTween, {
+	                BackgroundTransparency = 1
+	            })
+	            NeverLose.PlayAnimate(SlideMoving, SlowyTween, {
+	                BackgroundTransparency = 1,
+	                Size = UDim2.new(0, 0, 1, 0)
+	            })
+	            -- Скрываем тултип если слайдер скрыт
+	            WorldTooltip.Visible = false
+	        end
+	    end)
+	
+	    SliderLib.SetRender(Signal:GetValue())
+	    SliderLib.Signal = Signal:Connect(SliderLib.SetRender)
+	
+	    function SliderLib:GetValue()
+	        return Config.Default
+	    end
+	
+	    function SliderLib:SetValue(v)
+	        Config.Default = v
+	
+	        if Signal:GetValue() then
+	            NeverLose.PlayAnimate(SlideMoving, SlowyTween, {
+	                BackgroundTransparency = 0,
+	                Size = UDim2.new(SliderLib.GetSize(), 0, 1, 0)
+	            })
+	        end
+	
+	        Config.Callback(Config.Default)
+	    end
+	
+	    -- Очистка тултипа при уничтожении слайдера
+	    NeverLose:AddSignal(Slider.Destroying:Connect(function()
+	        if WorldTooltip and WorldTooltip.Parent then
+	            WorldTooltip:Destroy()
+	        end
+	    end))
+	
+	    if Config.Flag then
+	        NeverLose.Flags[Config.Flag] = SliderLib
+	    end
+	
+	    return SliderLib
+	end
+
 	function handle:AddOption(GearIcon)
 		local Option = Instance.new("Frame")
 		local Icon = Instance.new("TextLabel")
