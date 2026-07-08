@@ -2344,18 +2344,20 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 			return tostring(Config.Default) .. tostring(Config.Type)
 		end
 	
+		local tooltipUpdateConnection = nil
+	
 		local function UpdateTooltip()
 			local txt = GetValueText()
 			local textSize = TextService:GetTextSize(txt, 10, Enum.Font.GothamMedium, Vector2.new(math.huge, math.huge))
 			TooltipFrame.Size = UDim2.new(0, textSize.X + 10, 0, 20)
 			TooltipLabel.Text = txt
-		
+	
 			local scale = SliderLib.GetSize()
-			local absPos = SlideFrame.AbsolutePosition
-			local absSize = SlideFrame.AbsoluteSize
-			local xPos = absPos.X + absSize.X * scale
-			local yPos = absPos.Y - 8
-		
+			local sliderPos = Slider.AbsolutePosition
+			local sliderSize = Slider.AbsoluteSize
+			local xPos = sliderPos.X + sliderSize.X * scale
+			local yPos = sliderPos.Y
+	
 			TooltipFrame.Position = UDim2.new(0, xPos, 0, yPos)
 		end
 	
@@ -2365,6 +2367,13 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 		local function ShowTooltip()
 			UpdateTooltip()
 			TooltipFrame.Visible = true
+			
+			if tooltipUpdateConnection then
+				tooltipUpdateConnection:Disconnect()
+			end
+			
+			tooltipUpdateConnection = RunService.RenderStepped:Connect(UpdateTooltip)
+			
 			NeverLose.PlayAnimate(TooltipFrame, SlowyTween, { BackgroundTransparency = 0 })
 			NeverLose.PlayAnimate(TooltipLabel, SlowyTween, { TextTransparency = 0 })
 			NeverLose.PlayAnimate(TooltipStroke, SlowyTween, { Transparency = 0.5 })
@@ -2372,6 +2381,11 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 		end
 	
 		local function HideTooltip()
+			if tooltipUpdateConnection then
+				tooltipUpdateConnection:Disconnect()
+				tooltipUpdateConnection = nil
+			end
+			
 			NeverLose.PlayAnimate(TooltipFrame, SlowyTween, { BackgroundTransparency = 1 })
 			NeverLose.PlayAnimate(TooltipLabel, SlowyTween, { TextTransparency = 1 })
 			NeverLose.PlayAnimate(TooltipStroke, SlowyTween, { Transparency = 1 })
@@ -2396,10 +2410,6 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 			TweenService:Create(SlideMoving, ManualTween, {
 				Size = UDim2.new(SliderLib.GetSize(), 0, 1, 0)
 			}):Play()
-	
-			if isHovered or isHold then
-				UpdateTooltip()
-			end
 	
 			Config.Callback(Value)
 		end
@@ -2475,6 +2485,10 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 					Size = UDim2.new(0, 0, 1, 0)
 				})
 				TooltipFrame.Visible = false
+				if tooltipUpdateConnection then
+					tooltipUpdateConnection:Disconnect()
+					tooltipUpdateConnection = nil
+				end
 			end
 		end)
 	
@@ -2482,6 +2496,9 @@ function NeverLose:RegisiterHandler(Handler: Frame , Signal)
 		SliderLib.Signal = Signal:Connect(SliderLib.SetRender)
 	
 		NeverLose:AddSignal(Slider.Destroying:Connect(function()
+			if tooltipUpdateConnection then
+				tooltipUpdateConnection:Disconnect()
+			end
 			if TooltipFrame and TooltipFrame.Parent then
 				TooltipFrame:Destroy()
 			end
