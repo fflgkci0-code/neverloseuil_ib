@@ -6476,7 +6476,7 @@ function NeverLose:CreateWindow(Config)
 	    HeaderIcon.Size = UDim2.new(0, 20, 0, 20)
 	    HeaderIcon.ZIndex = 17
 	    HeaderIcon.FontFace = NeverLose.BuiltInBold
-	    HeaderIcon.Text = "" -- keyboard icon
+	    HeaderIcon.Text = "key" -- keyboard icon
 	    HeaderIcon.TextColor3 = NeverLose.AccentColor
 	    HeaderIcon.TextSize = 16
 	    HeaderIcon.TextTransparency = 0.250
