@@ -6430,259 +6430,321 @@ function NeverLose:CreateWindow(Config)
 	Window:SetRender(false);
 
 	function Window:Hotkeys()
-	    if NeverLose.__HotkeysCache then
-	        return NeverLose.__HotkeysCache;
-	    end;
+		if NeverLose.__HotkeysCache then
+			return NeverLose.__HotkeysCache;
+		end;
 	
-	    local Hotkeys_lb = {};
-	    local Hotkeys = Instance.new("Frame")
-	    local UICorner = Instance.new("UICorner")
-	    local Shadow = NeverLose:CreateShadow(Hotkeys);
+		local Hotkeys_lb = {};
 	
-	    Hotkeys.Name = NeverLose.RandomString();
-	    Hotkeys.Parent = NeverLose.ScreenGui
-	    Hotkeys.BackgroundColor3 = Color3.fromRGB(8, 8, 13)
-	    Hotkeys.BackgroundTransparency = 0.200
-	    Hotkeys.BorderSizePixel = 0
-	    Hotkeys.ClipsDescendants = true
-	    Hotkeys.Position = UDim2.new(1, -190, 0, 50)
-	    Hotkeys.Size = UDim2.new(0, 180, 0, 40)
-	    Hotkeys.ZIndex = 16
+		local Hotkeys = Instance.new("Frame");
+		local UICorner = Instance.new("UICorner");
+		local Shadow = NeverLose:CreateShadow(Hotkeys);
 	
-	    UICorner.CornerRadius = UDim.new(0, 10)
-	    UICorner.Parent = Hotkeys
+		local Header = Instance.new("Frame");
+		local HeaderIcon = Instance.new("TextLabel");
+		local HeaderTitle = Instance.new("TextLabel");
 	
-	    local Header = Instance.new("Frame")
-	    local HeaderIcon = Instance.new("ImageLabel")
-	    local HeaderTitle = Instance.new("TextLabel")
+		local FeaturesHolder = Instance.new("Frame");
+		local FeaturesLayout = Instance.new("UIListLayout");
+		local FeaturesPadding = Instance.new("UIPadding");
 	
-	    Header.Name = "Header"
-	    Header.Parent = Hotkeys
-	    Header.BackgroundTransparency = 1
-	    Header.Size = UDim2.new(1, 0, 0, 35)
-	    Header.Position = UDim2.new(0, 0, 0, 0)
+		Hotkeys.Name = NeverLose.RandomString();
+		Hotkeys.Parent = NeverLose.ScreenGui;
+		Hotkeys.BackgroundColor3 = Color3.fromRGB(8, 8, 13);
+		Hotkeys.BackgroundTransparency = 0.200;
+		Hotkeys.BorderSizePixel = 0;
+		Hotkeys.ClipsDescendants = true;
+		Hotkeys.Position = UDim2.new(1, -200, 0, 50);
+		Hotkeys.Size = UDim2.new(0, 190, 0, 35);
+		Hotkeys.ZIndex = 16;
 	
-	    HeaderIcon.Parent = Header
-	    HeaderIcon.AnchorPoint = Vector2.new(0, 0.5)
-	    HeaderIcon.BackgroundTransparency = 1
-	    HeaderIcon.Position = UDim2.new(0, 12, 0.5, 0)
-	    HeaderIcon.Size = UDim2.new(0, 20, 0, 20)
-	    HeaderIcon.ZIndex = 17
-	    HeaderIcon.Image = NeverLose:GetIcon("key-space") -- keyboard icon
-	    HeaderIcon.ImageColor3 = NeverLose.AccentColor
-	    HeaderIcon.ImageTransparency = 0.250
+		UICorner.CornerRadius = UDim.new(0, 10);
+		UICorner.Parent = Hotkeys;
 	
-	    NeverLose:SyncAccent(HeaderIcon, 'ImageColor3')
+		Header.Name = "Header";
+		Header.Parent = Hotkeys;
+		Header.BackgroundTransparency = 1;
+		Header.Size = UDim2.new(1, 0, 0, 35);
+		Header.Active = true;
 	
-	    HeaderTitle.Parent = Header
-	    HeaderTitle.AnchorPoint = Vector2.new(0, 0.5)
-	    HeaderTitle.BackgroundTransparency = 1
-	    HeaderTitle.Position = UDim2.new(0, 36, 0.5, 0)
-	    HeaderTitle.Size = UDim2.new(1, -46, 0, 20)
-	    HeaderTitle.ZIndex = 17
-	    HeaderTitle.Font = Enum.Font.GothamBold
-	    HeaderTitle.Text = "Hotkeys"
-	    HeaderTitle.TextColor3 = Color3.fromRGB(186, 186, 186)
-	    HeaderTitle.TextSize = 14
-	    HeaderTitle.TextTransparency = 0.200
-	    HeaderTitle.TextXAlignment = Enum.TextXAlignment.Left
+		HeaderIcon.Name = NeverLose.RandomString();
+		HeaderIcon.Parent = Header;
+		HeaderIcon.AnchorPoint = Vector2.new(0, 0.5);
+		HeaderIcon.BackgroundTransparency = 1;
+		HeaderIcon.Position = UDim2.new(0, 12, 0.5, 0);
+		HeaderIcon.Size = UDim2.new(0, 18, 0, 18);
+		HeaderIcon.ZIndex = 17;
+		HeaderIcon.FontFace = NeverLose.BuiltInBold;
+		HeaderIcon.Text = "key-alt"; -- можешь поменять на key / key-space
+		HeaderIcon.TextColor3 = NeverLose.AccentColor;
+		HeaderIcon.TextSize = 16;
+		HeaderIcon.TextTransparency = 0.250;
+		HeaderIcon.TextWrapped = true;
 	
-	    local FeaturesContainer = Instance.new("Frame")
-	    local FeaturesLayout = Instance.new("UIListLayout")
-	    local FeaturesPadding = Instance.new("UIPadding")
+		HeaderTitle.Name = NeverLose.RandomString();
+		HeaderTitle.Parent = Header;
+		HeaderTitle.AnchorPoint = Vector2.new(0, 0.5);
+		HeaderTitle.BackgroundTransparency = 1;
+		HeaderTitle.Position = UDim2.new(0, 36, 0.5, 0);
+		HeaderTitle.Size = UDim2.new(1, -46, 0, 20);
+		HeaderTitle.ZIndex = 17;
+		HeaderTitle.Font = Enum.Font.GothamBold;
+		HeaderTitle.Text = "Hotkeys";
+		HeaderTitle.TextColor3 = Color3.fromRGB(186, 186, 186);
+		HeaderTitle.TextSize = 14;
+		HeaderTitle.TextTransparency = 0.200;
+		HeaderTitle.TextXAlignment = Enum.TextXAlignment.Left;
 	
-	    FeaturesContainer.Name = "Features"
-	    FeaturesContainer.Parent = Hotkeys
-	    FeaturesContainer.BackgroundTransparency = 1
-	    FeaturesContainer.Position = UDim2.new(0, 0, 0, 35)
-	    FeaturesContainer.Size = UDim2.new(1, 0, 0, 0)
-	    FeaturesContainer.ClipsDescendants = true
+		FeaturesHolder.Name = "Features";
+		FeaturesHolder.Parent = Hotkeys;
+		FeaturesHolder.BackgroundTransparency = 1;
+		FeaturesHolder.Position = UDim2.new(0, 0, 0, 35);
+		FeaturesHolder.Size = UDim2.new(1, 0, 0, 0);
+		FeaturesHolder.ClipsDescendants = true;
 	
-	    FeaturesLayout.Parent = FeaturesContainer
-	    FeaturesLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	    FeaturesLayout.Padding = UDim.new(0, 4)
+		FeaturesLayout.Parent = FeaturesHolder;
+		FeaturesLayout.SortOrder = Enum.SortOrder.LayoutOrder;
+		FeaturesLayout.Padding = UDim.new(0, 4);
 	
-	    FeaturesPadding.Parent = FeaturesContainer
-	    FeaturesPadding.PaddingLeft = UDim.new(0, 10)
-	    FeaturesPadding.PaddingRight = UDim.new(0, 10)
-	    FeaturesPadding.PaddingBottom = UDim.new(0, 6)
+		FeaturesPadding.Parent = FeaturesHolder;
+		FeaturesPadding.PaddingLeft = UDim.new(0, 8);
+		FeaturesPadding.PaddingRight = UDim.new(0, 8);
+		FeaturesPadding.PaddingBottom = UDim.new(0, 6);
 	
-	    local function UpdateSize()
-	        local contentY = FeaturesLayout.AbsoluteContentSize.Y
-	        if contentY > 0 then
-	            contentY = contentY + 10
-	        end
-	        FeaturesContainer.Size = UDim2.new(1, 0, 0, contentY)
-	        NeverLose.PlayAnimate(Hotkeys, SlowyTween, {
-	            Size = UDim2.new(0, 180, 0, 35 + contentY)
-	        })
-	    end
+		pcall(function()
+			NeverLose:SyncAccent(HeaderIcon, 'TextColor3');
+		end);
 	
-	    FeaturesLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(UpdateSize)
+		local function UpdateSize()
+			local contentY = FeaturesLayout.AbsoluteContentSize.Y;
+			local finalY = 35;
 	
-	    Hotkeys:GetPropertyChangedSignal('BackgroundTransparency'):Connect(function()
-	        if Hotkeys.BackgroundTransparency > 0.9 then
-	            Hotkeys.Visible = false
-	            Hotkeys.Parent = nil
-	        else
-	            Hotkeys.Parent = NeverLose.ScreenGui
-	            Hotkeys.Visible = true
-	        end
-	    end)
+			if contentY > 0 then
+				finalY = 35 + contentY + 6;
+			end;
 	
-	    local dragging = false
-	    local dragStart, startPos
+			FeaturesHolder.Size = UDim2.new(1, 0, 0, math.max(0, finalY - 35));
 	
-	    Header.InputBegan:Connect(function(input)
-	        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-	            dragging = true
-	            dragStart = input.Position
-	            startPos = Hotkeys.Position
-	            input.Changed:Connect(function()
-	                if input.UserInputState == Enum.UserInputState.End then
-	                    dragging = false
-	                end
-	            end)
-	        end
-	    end)
+			NeverLose.PlayAnimate(Hotkeys, SlowyTween, {
+				Size = UDim2.new(0, 190, 0, finalY)
+			});
+		end;
 	
-	    game:GetService("UserInputService").InputChanged:Connect(function(input)
-	        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-	            local delta = input.Position - dragStart
-	            Hotkeys.Position = UDim2.new(
-	                startPos.X.Scale, startPos.X.Offset + delta.X,
-	                startPos.Y.Scale, startPos.Y.Offset + delta.Y
-	            )
-	        end
-	    end)
+		FeaturesLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(LPH_NO_VIRTUALIZE(UpdateSize));
 	
-	    Shadow:Render(true)
+		Hotkeys:GetPropertyChangedSignal('BackgroundTransparency'):Connect(LPH_NO_VIRTUALIZE(function()
+			if Hotkeys.BackgroundTransparency > 0.9 then
+				Hotkeys.Visible = false;
+				Hotkeys.Parent = nil;
+			else
+				Hotkeys.Parent = NeverLose.ScreenGui;
+				Hotkeys.Visible = true;
+			end;
+		end));
 	
-	    Hotkeys_lb.Features = {}
-	    Hotkeys_lb.Renders = {}
-	    Hotkeys_lb.Status = true
+		do
+			local UserInputService = game:GetService("UserInputService");
+			local dragging = false;
+			local dragStart;
+			local startPos;
 	
-	    function Hotkeys_lb:SetRender(value)
-	        Hotkeys_lb.Status = value
+			Header.InputBegan:Connect(LPH_NO_VIRTUALIZE(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+					dragging = true;
+					dragStart = input.Position;
+					startPos = Hotkeys.Position;
 	
-	        if value then
-	            NeverLose.PlayAnimate(Hotkeys, SlowyTween, { BackgroundTransparency = 0.200 })
-	            Shadow:Render(true)
-	            NeverLose.PlayAnimate(HeaderIcon, SlowyTween, { ImageTransparency = 0.250 })
-	            NeverLose.PlayAnimate(HeaderTitle, SlowyTween, { TextTransparency = 0.200 })
+					input.Changed:Connect(function()
+						if input.UserInputState == Enum.UserInputState.End then
+							dragging = false;
+						end;
+					end);
+				end;
+			end));
 	
-	            for _, v in next, Hotkeys_lb.Renders do
-	                pcall(v, true)
-	            end
-	        else
-	            NeverLose.PlayAnimate(Hotkeys, SlowyTween, { BackgroundTransparency = 1 })
-	            Shadow:Render(false)
-	            NeverLose.PlayAnimate(HeaderIcon, SlowyTween, { ImageTransparency = 1 })
-	            NeverLose.PlayAnimate(HeaderTitle, SlowyTween, { TextTransparency = 1 })
+			UserInputService.InputChanged:Connect(LPH_NO_VIRTUALIZE(function(input)
+				if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+					local delta = input.Position - dragStart;
 	
-	            for _, v in next, Hotkeys_lb.Renders do
-	                pcall(v, false)
-	            end
-	        end
-	    end
+					Hotkeys.Position = UDim2.new(
+						startPos.X.Scale,
+						startPos.X.Offset + delta.X,
+						startPos.Y.Scale,
+						startPos.Y.Offset + delta.Y
+					);
+				end;
+			end));
+		end;
 	
-	    function Hotkeys_lb:AddFeature(name, value)
-	        local Feature = {}
+		Hotkeys_lb.Features = {};
+		Hotkeys_lb.Renders = {};
+		Hotkeys_lb.Status = true;
 	
-	        local FeatureFrame = Instance.new("Frame")
-	        local FeatureCorner = Instance.new("UICorner")
-	        local FeaturePadding = Instance.new("UIPadding")
-	        local StatusIcon = Instance.new("ImageLabel")
-	        local FeatureName = Instance.new("TextLabel")
+		Shadow:Render(true);
+		NeverLose.__HotkeysCache = Hotkeys_lb;
 	
-	        FeatureFrame.Parent = FeaturesContainer
-	        FeatureFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
-	        FeatureFrame.BackgroundTransparency = 0.400
-	        FeatureFrame.Size = UDim2.new(1, 0, 0, 28)
-	        FeatureFrame.ClipsDescendants = true
-	        FeatureFrame.ZIndex = 16
+		function Hotkeys_lb:SetRender(value)
+			Hotkeys_lb.Status = value;
 	
-	        FeatureCorner.CornerRadius = UDim.new(0, 6)
-	        FeatureCorner.Parent = FeatureFrame
+			if value then
+				NeverLose.PlayAnimate(Hotkeys, SlowyTween, {
+					BackgroundTransparency = 0.200
+				});
 	
-	        FeaturePadding.Parent = FeatureFrame
-	        FeaturePadding.PaddingLeft = UDim.new(0, 8)
-	        FeaturePadding.PaddingRight = UDim.new(0, 8)
+				Shadow:Render(true);
 	
-	        StatusIcon.Parent = FeatureFrame
-	        StatusIcon.AnchorPoint = Vector2.new(0, 0.5)
-	        StatusIcon.BackgroundTransparency = 1
-	        StatusIcon.Position = UDim2.new(0, 0, 0.5, 0)
-	        StatusIcon.Size = UDim2.new(0, 14, 0, 14)
-	        StatusIcon.ZIndex = 17
-	        StatusIcon.Image = value and NeverLose:GetIcon("check") or NeverLose:GetIcon("x")
-	        StatusIcon.ImageColor3 = value and NeverLose.AccentColor or Color3.fromRGB(255, 80, 80)
-	        StatusIcon.ImageTransparency = 0.300
+				NeverLose.PlayAnimate(HeaderIcon, SlowyTween, {
+					TextTransparency = 0.250
+				});
 	
-	        FeatureName.Parent = FeatureFrame
-	        FeatureName.AnchorPoint = Vector2.new(0, 0.5)
-	        FeatureName.BackgroundTransparency = 1
-	        FeatureName.Position = UDim2.new(0, 22, 0.5, 0)
-	        FeatureName.Size = UDim2.new(1, -30, 0, 20)
-	        FeatureName.ZIndex = 17
-	        FeatureName.Font = Enum.Font.Gotham
-	        FeatureName.Text = name
-	        FeatureName.TextColor3 = Color3.fromRGB(160, 160, 160)
-	        FeatureName.TextSize = 12
-	        FeatureName.TextTransparency = 0.300
-	        FeatureName.TextXAlignment = Enum.TextXAlignment.Left
+				NeverLose.PlayAnimate(HeaderTitle, SlowyTween, {
+					TextTransparency = 0.200
+				});
 	
-	        Feature.Value = value
-	        Feature.Visible = true
+				for _, v in next, Hotkeys_lb.Renders do
+					pcall(v, true);
+				end;
+			else
+				NeverLose.PlayAnimate(Hotkeys, SlowyTween, {
+					BackgroundTransparency = 1
+				});
 	
-	        Feature.SetRender = function(visible)
-	            if visible and Feature.Visible then
-	                NeverLose.PlayAnimate(StatusIcon, SlowyTween, { ImageTransparency = 0.300 })
-	                NeverLose.PlayAnimate(FeatureName, SlowyTween, { TextTransparency = 0.300 })
-	                NeverLose.PlayAnimate(FeatureFrame, SlowyTween, {
-	                    Size = UDim2.new(1, 0, 0, 28),
-	                    BackgroundTransparency = 0.400
-	                })
-	            else
-	                NeverLose.PlayAnimate(StatusIcon, SlowyTween, { ImageTransparency = 1 })
-	                NeverLose.PlayAnimate(FeatureName, SlowyTween, { TextTransparency = 1 })
-	                NeverLose.PlayAnimate(FeatureFrame, SlowyTween, {
-	                    Size = UDim2.new(1, 0, 0, 0),
-	                    BackgroundTransparency = 1
-	                })
-	            end
-	        end
+				Shadow:Render(false);
 	
-	        table.insert(Hotkeys_lb.Renders, Feature.SetRender)
+				NeverLose.PlayAnimate(HeaderIcon, SlowyTween, {
+					TextTransparency = 1
+				});
 	
-	        function Feature:SetValue(newValue)
-	            Feature.Value = newValue
-	            if newValue then
-	                StatusIcon.Image = NeverLose:GetIcon("check")
-	                NeverLose.PlayAnimate(StatusIcon, SlowyTween, {
-	                    ImageColor3 = NeverLose.AccentColor
-	                })
-	            else
-	                StatusIcon.Image = NeverLose:GetIcon("x")
-	                NeverLose.PlayAnimate(StatusIcon, SlowyTween, {
-	                    ImageColor3 = Color3.fromRGB(255, 80, 80)
-	                })
-	            end
-	        end
+				NeverLose.PlayAnimate(HeaderTitle, SlowyTween, {
+					TextTransparency = 1
+				});
 	
-	        function Feature:SetVisible(v)
-	            Feature.Visible = v
-	            if Hotkeys_lb.Status then
-	                Feature.SetRender(v)
-	            end
-	        end
+				for _, v in next, Hotkeys_lb.Renders do
+					pcall(v, false);
+				end;
+			end;
+		end;
 	
-	        Hotkeys_lb.Features[name] = Feature
-	        return Feature
-	    end
+		function Hotkeys_lb:AddFeature(name, value)
+		    local Feature = {};
+		
+		    local FeatureFrame = Instance.new("Frame");
+		    local FeatureCorner = Instance.new("UICorner");
+		    local StatusIcon = Instance.new("TextLabel");
+		    local FeatureName = Instance.new("TextLabel");
+		
+		    FeatureFrame.Parent = FeaturesHolder;
+		    FeatureFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 22);
+		    FeatureFrame.BackgroundTransparency = 0.350;
+		    FeatureFrame.BorderSizePixel = 0;
+		    FeatureFrame.Size = UDim2.new(1, 0, 0, 26);
+		    FeatureFrame.ClipsDescendants = true;
+		    FeatureFrame.ZIndex = 16;
+		
+		    FeatureCorner.CornerRadius = UDim.new(0, 7);
+		    FeatureCorner.Parent = FeatureFrame;
+		
+		    StatusIcon.Name = NeverLose.RandomString();
+		    StatusIcon.Parent = FeatureFrame;
+		    StatusIcon.AnchorPoint = Vector2.new(0, 0.5);
+		    StatusIcon.BackgroundTransparency = 1;
+		    StatusIcon.Position = UDim2.new(0, 8, 0.5, 0);
+		    StatusIcon.Size = UDim2.new(0, 14, 0, 14);
+		    StatusIcon.ZIndex = 17;
+		    StatusIcon.FontFace = NeverLose.BuiltInBold;
+		    StatusIcon.Text = value and "circle-check" or "circle-x";
+		    StatusIcon.TextColor3 = value and NeverLose.AccentColor or Color3.fromRGB(255, 80, 80);
+		    StatusIcon.TextSize = 13;
+		    StatusIcon.TextTransparency = 0.250;
+		    StatusIcon.TextWrapped = true;
+		
+		    FeatureName.Name = NeverLose.RandomString();
+		    FeatureName.Parent = FeatureFrame;
+		    FeatureName.AnchorPoint = Vector2.new(0, 0.5);
+		    FeatureName.BackgroundTransparency = 1;
+		    FeatureName.Position = UDim2.new(0, 28, 0.5, 0);
+		    FeatureName.Size = UDim2.new(1, -36, 0, 18);
+		    FeatureName.ZIndex = 17;
+		    FeatureName.Font = Enum.Font.Gotham;
+		    FeatureName.Text = name;
+		    FeatureName.TextColor3 = Color3.fromRGB(186, 186, 186);
+		    FeatureName.TextSize = 12;
+		    FeatureName.TextTransparency = 0.250;
+		    FeatureName.TextXAlignment = Enum.TextXAlignment.Left;
+		
+		    Feature.Visible = true;
+		    Feature.Value = value;
+		
+		    local function UpdateValue()
+		        if Feature.Value then
+		            StatusIcon.Text = "circle-check";
+		            StatusIcon.TextColor3 = NeverLose.AccentColor;
+		        else
+		            StatusIcon.Text = "circle-x";
+		            StatusIcon.TextColor3 = Color3.fromRGB(255, 80, 80);
+		        end;
+		    end;
+		
+		    Feature.SetRender = LPH_NO_VIRTUALIZE(function(renderValue)
+		        if renderValue and Feature.Visible then
+		            NeverLose.PlayAnimate(FeatureFrame, SlowyTween, {
+		                Size = UDim2.new(1, 0, 0, 26),
+		                BackgroundTransparency = 0.350
+		            });
+		
+		            NeverLose.PlayAnimate(StatusIcon, SlowyTween, {
+		                TextTransparency = 0.250
+		            });
+		
+		            NeverLose.PlayAnimate(FeatureName, SlowyTween, {
+		                TextTransparency = 0.250
+		            });
+		        else
+		            NeverLose.PlayAnimate(FeatureFrame, SlowyTween, {
+		                Size = UDim2.new(1, 0, 0, 0),
+		                BackgroundTransparency = 1
+		            });
+		
+		            NeverLose.PlayAnimate(StatusIcon, SlowyTween, {
+		                TextTransparency = 1
+		            });
+		
+		            NeverLose.PlayAnimate(FeatureName, SlowyTween, {
+		                TextTransparency = 1
+		            });
+		        end;
+		    end);
+		
+		    function Feature:SetValue(v)
+		        Feature.Value = v;
+		        UpdateValue();
+		    end;
+		
+		    function Feature:SetVisible(v)
+		        Feature.Visible = v;
+		
+		        if Hotkeys_lb.Status then
+		            Feature.SetRender(v);
+		        else
+		            Feature.SetRender(false);
+		        end;
+		    end;
+		
+		    function Feature:SetText(t)
+		        FeatureName.Text = t;
+		    end;
+		
+		    UpdateValue();
+		
+		    table.insert(Hotkeys_lb.Renders, Feature.SetRender);
+		    table.insert(Hotkeys_lb.Features, Feature);
+		
+		    return Feature;
+		end;
 	
-	    return Hotkeys_lb
+		return Hotkeys_lb;
 	end
+
 	return Window;
 end;
 
