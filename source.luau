@@ -6626,121 +6626,121 @@ function NeverLose:CreateWindow(Config)
 		end;
 	
 		function Hotkeys_lb:AddFeature(name, value)
-		    local Feature = {};
+			local Feature = {};
 		
-		    local FeatureFrame = Instance.new("Frame");
-		    local FeatureCorner = Instance.new("UICorner");
-		    local StatusIcon = Instance.new("TextLabel");
-		    local FeatureName = Instance.new("TextLabel");
+			local FeatureFrame = Instance.new("Frame");
+			local FeatureCorner = Instance.new("UICorner");
+			local StatusIcon = Instance.new("TextLabel");
+			local FeatureName = Instance.new("TextLabel");
 		
-		    FeatureFrame.Parent = FeaturesHolder;
-		    FeatureFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 22);
-		    FeatureFrame.BackgroundTransparency = 0.350;
-		    FeatureFrame.BorderSizePixel = 0;
-		    FeatureFrame.Size = UDim2.new(1, 0, 0, 26);
-		    FeatureFrame.ClipsDescendants = true;
-		    FeatureFrame.ZIndex = 16;
+			FeatureFrame.Parent = FeaturesHolder;
+			FeatureFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 22);
+			FeatureFrame.BackgroundTransparency = 0.350;
+			FeatureFrame.BorderSizePixel = 0;
+			FeatureFrame.Size = UDim2.new(1, 0, 0, 26);
+			FeatureFrame.ClipsDescendants = true;
+			FeatureFrame.ZIndex = 16;
 		
-		    FeatureCorner.CornerRadius = UDim.new(0, 7);
-		    FeatureCorner.Parent = FeatureFrame;
+			FeatureCorner.CornerRadius = UDim.new(0, 7);
+			FeatureCorner.Parent = FeatureFrame;
 		
-		    StatusIcon.Name = NeverLose.RandomString();
-		    StatusIcon.Parent = FeatureFrame;
-		    StatusIcon.AnchorPoint = Vector2.new(0, 0.5);
-		    StatusIcon.BackgroundTransparency = 1;
-		    StatusIcon.Position = UDim2.new(0, 8, 0.5, 0);
-		    StatusIcon.Size = UDim2.new(0, 14, 0, 14);
-		    StatusIcon.ZIndex = 17;
-		    StatusIcon.FontFace = NeverLose.BuiltInBold;
-		    StatusIcon.Text = value and "circle-check" or "circle-x";
-		    StatusIcon.TextColor3 = value and NeverLose.AccentColor or Color3.fromRGB(255, 80, 80);
-		    StatusIcon.TextSize = 13;
-		    StatusIcon.TextTransparency = 0.250;
-		    StatusIcon.TextWrapped = true;
+			StatusIcon.Name = NeverLose.RandomString();
+			StatusIcon.Parent = FeatureFrame;
+			StatusIcon.AnchorPoint = Vector2.new(0, 0.5);
+			StatusIcon.BackgroundTransparency = 1;
+			StatusIcon.Position = UDim2.new(0, 8, 0.5, 0);
+			StatusIcon.Size = UDim2.new(0, 14, 0, 14);
+			StatusIcon.ZIndex = 17;
+			StatusIcon.FontFace = NeverLose.BuiltInBold;
+			StatusIcon.Text = value and "circle-check" or "circle-x";
+			StatusIcon.TextColor3 = value and NeverLose.AccentColor or Color3.fromRGB(255, 80, 80);
+			StatusIcon.TextSize = 13;
+			StatusIcon.TextTransparency = 0.250;
+			StatusIcon.TextWrapped = true;
 		
-		    FeatureName.Name = NeverLose.RandomString();
-		    FeatureName.Parent = FeatureFrame;
-		    FeatureName.AnchorPoint = Vector2.new(0, 0.5);
-		    FeatureName.BackgroundTransparency = 1;
-		    FeatureName.Position = UDim2.new(0, 28, 0.5, 0);
-		    FeatureName.Size = UDim2.new(1, -36, 0, 18);
-		    FeatureName.ZIndex = 17;
-		    FeatureName.Font = Enum.Font.Gotham;
-		    FeatureName.Text = name;
-		    FeatureName.TextColor3 = Color3.fromRGB(186, 186, 186);
-		    FeatureName.TextSize = 12;
-		    FeatureName.TextTransparency = 0.250;
-		    FeatureName.TextXAlignment = Enum.TextXAlignment.Left;
+			FeatureName.Name = NeverLose.RandomString();
+			FeatureName.Parent = FeatureFrame;
+			FeatureName.AnchorPoint = Vector2.new(0, 0.5);
+			FeatureName.BackgroundTransparency = 1;
+			FeatureName.Position = UDim2.new(0, 28, 0.5, 0);
+			FeatureName.Size = UDim2.new(1, -36, 0, 18);
+			FeatureName.ZIndex = 17;
+			FeatureName.Font = Enum.Font.Gotham;
+			FeatureName.Text = name;
+			FeatureName.TextColor3 = Color3.fromRGB(186, 186, 186);
+			FeatureName.TextSize = 12;
+			FeatureName.TextTransparency = 0.250;
+			FeatureName.TextXAlignment = Enum.TextXAlignment.Left;
 		
-		    Feature.Visible = true;
-		    Feature.Value = value;
+			Feature.Visible = true;
+			Feature.Value = value;
 		
-		    local function UpdateValue()
-		        if Feature.Value then
-		            StatusIcon.Text = "circle-check";
-		            StatusIcon.TextColor3 = NeverLose.AccentColor;
-		        else
-		            StatusIcon.Text = "circle-x";
-		            StatusIcon.TextColor3 = Color3.fromRGB(255, 80, 80);
-		        end;
-		    end;
+			local function UpdateValue()
+				if Feature.Value then
+					StatusIcon.Text = "circle-check";
+					StatusIcon.TextColor3 = NeverLose.AccentColor;
+				else
+					StatusIcon.Text = "circle-x";
+					StatusIcon.TextColor3 = Color3.fromRGB(255, 80, 80);
+				end;
+			end;
 		
-		    Feature.SetRender = LPH_NO_VIRTUALIZE(function(renderValue)
-		        if renderValue and Feature.Visible then
-		            NeverLose.PlayAnimate(FeatureFrame, SlowyTween, {
-		                Size = UDim2.new(1, 0, 0, 26),
-		                BackgroundTransparency = 0.350
-		            });
+			Feature.SetRender = LPH_NO_VIRTUALIZE(function(renderValue)
+				if renderValue and Feature.Visible then
+					NeverLose.PlayAnimate(FeatureFrame, SlowyTween, {
+						Size = UDim2.new(1, 0, 0, 26),
+						BackgroundTransparency = 0.350
+					});
 		
-		            NeverLose.PlayAnimate(StatusIcon, SlowyTween, {
-		                TextTransparency = 0.250
-		            });
+					NeverLose.PlayAnimate(StatusIcon, SlowyTween, {
+						TextTransparency = 0.250
+					});
 		
-		            NeverLose.PlayAnimate(FeatureName, SlowyTween, {
-		                TextTransparency = 0.250
-		            });
-		        else
-		            NeverLose.PlayAnimate(FeatureFrame, SlowyTween, {
-		                Size = UDim2.new(1, 0, 0, 0),
-		                BackgroundTransparency = 1
-		            });
+					NeverLose.PlayAnimate(FeatureName, SlowyTween, {
+						TextTransparency = 0.250
+					});
+				else
+					NeverLose.PlayAnimate(FeatureFrame, SlowyTween, {
+						Size = UDim2.new(1, 0, 0, 0),
+						BackgroundTransparency = 1
+					});
 		
-		            NeverLose.PlayAnimate(StatusIcon, SlowyTween, {
-		                TextTransparency = 1
-		            });
+					NeverLose.PlayAnimate(StatusIcon, SlowyTween, {
+						TextTransparency = 1
+					});
 		
-		            NeverLose.PlayAnimate(FeatureName, SlowyTween, {
-		                TextTransparency = 1
-		            });
-		        end;
-		    end);
+					NeverLose.PlayAnimate(FeatureName, SlowyTween, {
+						TextTransparency = 1
+					});
+				end;
+			end);
 		
-		    function Feature:SetValue(v)
-		        Feature.Value = v;
-		        UpdateValue();
-		    end;
+			function Feature:SetValue(v)
+				Feature.Value = v;
+				UpdateValue();
+			end;
 		
-		    function Feature:SetVisible(v)
-		        Feature.Visible = v;
+			function Feature:SetVisible(v)
+				Feature.Visible = v;
 		
-		        if Hotkeys_lb.Status then
-		            Feature.SetRender(v);
-		        else
-		            Feature.SetRender(false);
-		        end;
-		    end;
+				if Hotkeys_lb.Status then
+					Feature.SetRender(v);
+				else
+					Feature.SetRender(false);
+				end;
+			end;
 		
-		    function Feature:SetText(t)
-		        FeatureName.Text = t;
-		    end;
+			function Feature:SetText(t)
+				FeatureName.Text = t;
+			end;
 		
-		    UpdateValue();
+			UpdateValue();
 		
-		    table.insert(Hotkeys_lb.Renders, Feature.SetRender);
-		    table.insert(Hotkeys_lb.Features, Feature);
+			table.insert(Hotkeys_lb.Renders, Feature.SetRender);
+			table.insert(Hotkeys_lb.Features, Feature);
 		
-		    return Feature;
-		end;
+			return Feature;
+		end
 	
 		return Hotkeys_lb;
 	end
