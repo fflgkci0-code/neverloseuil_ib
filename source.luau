@@ -6467,19 +6467,18 @@ function NeverLose:CreateWindow(Config)
 		Header.Size = UDim2.new(1, 0, 0, 35);
 		Header.Active = true;
 	
-		HeaderIcon.Name = NeverLose.RandomString();
-		HeaderIcon.Parent = Header;
-		HeaderIcon.AnchorPoint = Vector2.new(0, 0.5);
-		HeaderIcon.BackgroundTransparency = 1;
-		HeaderIcon.Position = UDim2.new(0, 12, 0.5, 0);
-		HeaderIcon.Size = UDim2.new(0, 18, 0, 18);
-		HeaderIcon.ZIndex = 17;
-		HeaderIcon.FontFace = NeverLose.BuiltInBold;
-		HeaderIcon.Text = "key-alt"; -- можешь поменять на key / key-space
-		HeaderIcon.TextColor3 = NeverLose.AccentColor;
-		HeaderIcon.TextSize = 16;
-		HeaderIcon.TextTransparency = 0.250;
-		HeaderIcon.TextWrapped = true;
+		HeaderIcon.Parent = Header
+		HeaderIcon.AnchorPoint = Vector2.new(0, 0.5)
+		HeaderIcon.BackgroundTransparency = 1
+		HeaderIcon.Position = UDim2.new(0, 12, 0.5, 0)
+		HeaderIcon.Size = UDim2.new(0, 18, 0, 18)
+		HeaderIcon.ZIndex = 17
+		HeaderIcon.FontFace = NeverLose.BuiltInBold
+		HeaderIcon.Text = "key-alt"
+		HeaderIcon.TextColor3 = NeverLose.AccentColor
+		HeaderIcon.TextSize = 16
+		HeaderIcon.TextTransparency = 0.250
+		HeaderIcon.TextWrapped = true
 	
 		HeaderTitle.Name = NeverLose.RandomString();
 		HeaderTitle.Parent = Header;
